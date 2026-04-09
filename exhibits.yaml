@@ -1,0 +1,956 @@
+# ============================================================
+# HALL OF HUMAN TRANSFORMATION — Exhibit Records
+# ASCII Technology Museum
+# ============================================================
+# Schema version: 1.0
+# Each record is a self-contained exhibit unit.
+# Fields:
+#   id             — machine-readable key (snake_case)
+#   index          — display number (Roman numeral string)
+#   name           — full exhibit title
+#   era            — human-readable date string
+#   era_sort       — integer year for sorting (negative = BCE)
+#   category       — thematic grouping for hall placement
+#   artifact_label — the physical object displayed in the case
+#   ascii_object   — inline ASCII art of the artifact (for in-game render)
+#   placard_short  — 1–2 sentence touch prompt (shown on first contact)
+#   placard_long   — full museum-quality paragraph (shown on inspect)
+#   gallery_note   — italicized curatorial aside (optional)
+#   key_figures    — list of names associated with this technology
+#   predecessor_ids — exhibit ids this technology depends on
+#   descendant_ids  — exhibit ids this technology enabled
+#   tags           — thematic classification tags
+#   reading:
+#     title        — book title
+#     author       — author name
+#     year         — publication year
+#     note         — one-line annotation
+#   links          — list of {label, url, type} authoritative resources
+#   image:
+#     url          — public domain / CC0 canonical image URL
+#     source       — image credit / repository
+#     alt          — alt text description
+#     ascii_ramp   — suggested character ramp for ASCII conversion
+#   ambience       — suggested sound/atmosphere for in-game use
+# ============================================================
+
+exhibits:
+
+  - id: fire
+    index: "I"
+    name: "Fire & Controlled Combustion"
+    era: "c. 400,000 BCE"
+    era_sort: -400000
+    category: "The Ancient Foundations"
+    artifact_label: "Charred bone with ochre residue — Homo erectus hearth site"
+
+    ascii_object: |
+        )  (
+       (   ) )
+        ) ( (
+      _______)_
+   .-'---------|
+  ( C|/\/\/\/\/|
+   '-./\/\/\/\/|
+     '_________'
+      '-------'
+
+    placard_short: >
+      Before fire, humans were prey. After fire, they were the most dangerous
+      species on Earth. Touch to learn more.
+
+    placard_long: >
+      Controlled combustion is the ur-technology — the one that bootstrapped
+      the biological and social conditions for every other invention.
+      Cooking with fire pre-digests food, releasing far more calories per
+      bite and requiring dramatically less gut to process. Over hundreds of
+      thousands of years, the metabolic savings migrated upward: intestines
+      shrank, skulls expanded, and Homo sapiens became cognitively anomalous.
+      Fire also extended the day, creating the campfire evening — the first
+      protected social space in which storytelling, ritual, and myth were
+      born. Every industrial technology downstream — metallurgy, ceramics,
+      glass, steam, electricity, nuclear fission — is, at root, controlled
+      heat applied to matter.
+
+    gallery_note: >
+      In nearly every human mythology, fire is stolen — from gods, from
+      nature, hidden in fennel stalks. This is not decoration. It is a
+      cultural memory of rupture: the moment we crossed a threshold we
+      could never uncross.
+
+    key_figures:
+      - "Homo erectus (first evidence of controlled use)"
+      - "Richard Wrangham (cooking hypothesis)"
+      - "Johann Joachim Becher (phlogiston theory, 1667)"
+
+    predecessor_ids: []
+    descendant_ids: [agriculture, wheel, metallurgy, steam_engine]
+
+    tags: [foundational, biological, social, energy, prehistoric]
+
+    reading:
+      title: "Catching Fire: How Cooking Made Us Human"
+      author: "Richard Wrangham"
+      year: 2009
+      note: >
+        The primary source for the cooking-brain hypothesis. Readable,
+        provocative, and well-evidenced. Start here.
+
+    links:
+      - label: "Smithsonian Human Origins: Fire"
+        url: "https://humanorigins.si.edu/evidence/behavior/fire"
+        type: museum
+      - label: "Harvard Lab — Wrangham's Cooking Hypothesis"
+        url: "https://www.fas.harvard.edu/~primates/lab/cooking.html"
+        type: academic
+      - label: "PBS Eons: When Did Humans Start Using Fire?"
+        url: "https://www.pbs.org/video/when-did-humans-start-using-fire-gijynz/"
+        type: educational
+
+    image:
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Campfire_at_Foster_Falls.jpg/1280px-Campfire_at_Foster_Falls.jpg"
+      source: "Wikimedia Commons (CC BY-SA 3.0)"
+      alt: "Campfire burning at night, flames visible against dark background"
+      ascii_ramp: " .'`^,:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+
+    ambience: "crackling fire, distant wind, occasional owl"
+
+
+  - id: agriculture
+    index: "II"
+    name: "Agriculture & Domestication"
+    era: "c. 10,000 BCE"
+    era_sort: -10000
+    category: "The Ancient Foundations"
+    artifact_label: "Obsidian sickle blade — Fertile Crescent, Neolithic period"
+
+    ascii_object: |
+         |\
+         | \
+         |  \___
+      ___|      \
+     /   \  o o  \
+    |    |        |
+    |____|________|
+      ||||||||||||
+      ||||||||||||
+
+    placard_short: >
+      Humans gave up mobility and variety for surplus and settlement.
+      We have been renegotiating that bargain ever since. Touch to learn more.
+
+    placard_long: >
+      Agriculture is not simply a more efficient way to eat — it is a
+      completely different relationship between humans and the land.
+      By selectively cultivating grasses in the Fertile Crescent, the
+      Yangtze River valley, and Mesoamerica, humans created food surpluses
+      that enabled permanent settlement, population growth, occupational
+      specialization, and eventually the city. It also created, for the
+      first time in human history, something worth defending — and therefore
+      something worth taking. Inequality, standing armies, taxation, and
+      epidemic disease all followed directly from the agricultural bargain.
+      The Green Revolution of the 20th century was merely agriculture's
+      most recent renegotiation, feeding billions while concentrating
+      agricultural power in the hands of a few.
+
+    gallery_note: >
+      Anthropologist James C. Scott argues that early states did not
+      simply adopt agriculture — they imposed it, because grain is
+      the only staple crop that can be easily taxed. Root crops and
+      legumes resist state control. Wheat feeds armies and empires.
+
+    key_figures:
+      - "Anonymous Neolithic farmers (Fertile Crescent, c. 10,000 BCE)"
+      - "Norman Borlaug (Green Revolution, 20th c.)"
+      - "Nikolai Vavilov (mapped crop origins, 1920s–30s)"
+
+    predecessor_ids: [fire]
+    descendant_ids: [writing, wheel]
+
+    tags: [ecological, economic, social, prehistoric, food]
+
+    reading:
+      title: "Against the Grain: A Deep History of the Earliest States"
+      author: "James C. Scott"
+      year: 2017
+      note: >
+        A revisionist, skeptical account of agriculture's benefits.
+        Essential counterweight to triumphalist narratives.
+
+    links:
+      - label: "Smithsonian: The Development of Agriculture"
+        url: "https://www.smithsonianmag.com/history/the-development-of-agriculture-180976349/"
+        type: museum
+      - label: "Khan Academy: Origins of Agriculture"
+        url: "https://www.khanacademy.org/humanities/world-history/world-history-beginnings/birth-agriculture-neolithic-revolution/a/the-agricultural-revolution"
+        type: educational
+      - label: "FAO: History of Agriculture"
+        url: "https://www.fao.org/3/y3557e/y3557e02.htm"
+        type: institutional
+
+    image:
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Wild_emmer_002.jpg/1280px-Wild_emmer_002.jpg"
+      source: "Wikimedia Commons (CC BY-SA 3.0)"
+      alt: "Wild emmer wheat, ancestor of domesticated wheat, growing in field"
+      ascii_ramp: " .,;:clodxkO0KXN"
+
+    ambience: "wind through grain, distant livestock, insects"
+
+
+  - id: wheel
+    index: "III"
+    name: "The Wheel & Mechanical Advantage"
+    era: "c. 3500 BCE"
+    era_sort: -3500
+    category: "The Ancient Foundations"
+    artifact_label: "Tripartite wooden wheel — Mesopotamian replica, c. 3200 BCE"
+
+    ascii_object: |
+        .-""""-.
+       /  o  o  \
+      |  ------  |
+      |  |    |  |
+      |  ------  |
+       \        /
+        '------'
+       //      \\
+      //________\\
+
+    placard_short: >
+      The wheel is less an invention than an insight about rotational motion.
+      That insight underlies all of mechanical engineering. Touch to learn more.
+
+    placard_long: >
+      The wheel's genius is not the circle but the axle — the fixed point
+      around which rotation becomes useful work. From oxcarts to watermills
+      to clockwork escapements to the turbine blade, a single geometric
+      principle underlies the entirety of mechanical civilization. The wheel
+      collapsed the friction between places, making long-distance trade
+      economically viable for the first time. It also enabled the potter's
+      wheel, which industrialized ceramic production; the water wheel, which
+      harnessed river energy; and ultimately the flywheel, gear train, and
+      every rotary machine thereafter. The insight that rotation can be
+      captured and redirected is one of humanity's most generative.
+
+    gallery_note: >
+      The wheel was independently invented at least twice — in Mesopotamia
+      and in the Indus Valley — but notably not in pre-Columbian Americas,
+      where it appears in toys but not in practical use. Geography, not
+      ingenuity, was often the constraint.
+
+    key_figures:
+      - "Anonymous Sumerian craftsmen (c. 3500 BCE)"
+      - "Hero of Alexandria (described gear systems, c. 10–70 CE)"
+      - "James Watt (flywheel governor, 1788)"
+
+    predecessor_ids: [fire]
+    descendant_ids: [steam_engine, agriculture]
+
+    tags: [mechanical, trade, transport, prehistoric, engineering]
+
+    reading:
+      title: "The Lever of Riches: Technological Creativity and Economic Progress"
+      author: "Joel Mokyr"
+      year: 1990
+      note: >
+        The best single-volume economic history of technology.
+        Places the wheel in the long arc of mechanical innovation.
+
+    links:
+      - label: "Encyclopaedia Britannica: Wheel"
+        url: "https://www.britannica.com/technology/wheel"
+        type: reference
+      - label: "MIT: Mechanics & the Wheel"
+        url: "https://ocw.mit.edu/courses/res-2-002-finite-element-procedures-for-solids-and-structures-spring-2010/"
+        type: academic
+      - label: "Europeana: Wheeled Vehicles Collection"
+        url: "https://www.europeana.eu/en/search?query=wheeled+vehicle+ancient"
+        type: archive
+
+    image:
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Wheelbarrow_at_Abydos.jpg/1280px-Wheelbarrow_at_Abydos.jpg"
+      source: "Wikimedia Commons (Public Domain)"
+      alt: "Ancient carved relief showing wheeled cart in Mesopotamian style"
+      ascii_ramp: " .:-=+*#%@"
+
+    ambience: "creaking wood, rolling cart, market sounds"
+
+
+  - id: writing
+    index: "IV"
+    name: "Writing & Symbolic Records"
+    era: "c. 3200 BCE"
+    era_sort: -3200
+    category: "The Ancient Foundations"
+    artifact_label: "Clay tablet with cuneiform script — Sumerian, c. 3000 BCE (replica)"
+
+    ascii_object: |
+      .-----------.
+      | ||| || |  |
+      | || ||| |  |
+      | ||| | ||  |
+      | || || |||  |
+      | ||| ||| |  |
+      '-----------'
+
+    placard_short: >
+      Writing is the technology that made all other technologies cumulative.
+      Before it, knowledge died with its holder. Touch to learn more.
+
+    placard_long: >
+      Writing externalizes memory — it places knowledge outside any
+      individual mind and makes it persistent, transmissible, and
+      amendable. Before writing, every generation rebuilt its
+      understanding from scratch, limited to what living teachers
+      could convey. After writing, the dead could still instruct the
+      living. Law, mathematics, history, science, literature, religion,
+      and bureaucracy are all impossible without an external symbolic
+      store. The first writing systems — Sumerian cuneiform, Egyptian
+      hieroglyphics, Chinese oracle bone script — emerged independently
+      from the administrative demands of complex societies: who owns
+      which field, how much grain is owed, when taxes are due. The
+      accounting ledger preceded the poem by centuries.
+
+    gallery_note: >
+      The oldest known writing is not literature — it is inventory.
+      Uruk tablets from 3200 BCE record beer rations and grain
+      allocations. Bureaucracy is older than philosophy.
+
+    key_figures:
+      - "Anonymous Sumerian scribes (c. 3200 BCE)"
+      - "Sequoyah (Cherokee syllabary, 1821 — independent invention)"
+      - "Jean-François Champollion (deciphered hieroglyphics, 1822)"
+
+    predecessor_ids: [agriculture]
+    descendant_ids: [printing_press, internet]
+
+    tags: [cognitive, cultural, language, ancient, information]
+
+    reading:
+      title: "Origins of the Modern Mind"
+      author: "Merlin Donald"
+      year: 1991
+      note: >
+        A cognitive scientist's account of how external symbolic storage
+        transformed human thought. Dense but foundational.
+
+    links:
+      - label: "Library of Congress: History of Writing"
+        url: "https://www.loc.gov/collections/cuneiform-tablets/"
+        type: archive
+      - label: "Smithsonian: Cuneiform Collection"
+        url: "https://www.si.edu/search/collection-images?edan_q=cuneiform"
+        type: museum
+      - label: "Oxford: Ancient Writing Systems"
+        url: "https://www.ox.ac.uk/news/science-blog/writing-history"
+        type: academic
+
+    image:
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Cuneiform_script2.jpg/1280px-Cuneiform_script2.jpg"
+      source: "Wikimedia Commons (Public Domain)"
+      alt: "Close-up of Sumerian cuneiform clay tablet with wedge-shaped marks"
+      ascii_ramp: " .,;:clodxkO0KXN#"
+
+    ambience: "reed stylus on clay, distant market, wind"
+
+
+  - id: printing_press
+    index: "V"
+    name: "The Printing Press"
+    era: "1440 CE"
+    era_sort: 1440
+    category: "The Knowledge Revolutions"
+    artifact_label: "Movable type block set — Gutenberg-era reproduction, Mainz"
+
+    ascii_object: |
+      _____________
+     |  [PRESS]   |
+     |  _______   |
+     | |  | |  |  |
+     | |  | |  |  |
+     | |__|_|__|  |
+     |    |||     |
+     |____|_|_____|
+          |||
+         _|||_
+
+    placard_short: >
+      Gutenberg's press did not simply make books cheaper — it demolished
+      the institutional monopoly on truth. Touch to learn more.
+
+    placard_long: >
+      The printing press is the most instructive historical precedent for
+      every subsequent information technology. It did not merely accelerate
+      the distribution of existing knowledge — it destabilized the
+      institutions that controlled what counted as knowledge at all.
+      Within decades of Gutenberg's press (c. 1440), Martin Luther's
+      95 Theses had been printed and distributed across Europe, triggering
+      the Protestant Reformation and a century of religious warfare.
+      The same technology that spread Lutheran pamphlets spread scientific
+      treatises, vernacular literature, and eventually newspapers.
+      By making literacy economically viable for the middle class, the
+      press created the preconditions for the Enlightenment, the
+      Scientific Revolution, and modern democracy. Every technology that
+      redistributes the power to publish is, in some essential sense,
+      a second printing press.
+
+    gallery_note: >
+      The Church initially welcomed the printing press as a tool for
+      producing Bibles. Within 50 years, it was attempting to establish
+      the Index Librorum Prohibitorum — the first large-scale information
+      censorship regime in Western history.
+
+    key_figures:
+      - "Johannes Gutenberg (movable type press, c. 1440)"
+      - "Bi Sheng (ceramic movable type, China, c. 1040 — 400 years earlier)"
+      - "Aldus Manutius (pocket book format, Venice, 1490s)"
+
+    predecessor_ids: [writing]
+    descendant_ids: [internet]
+
+    tags: [media, power, disruption, knowledge, early_modern]
+
+    reading:
+      title: "The Printing Press as an Agent of Change"
+      author: "Elizabeth Eisenstein"
+      year: 1980
+      note: >
+        The canonical scholarly text. Densely argued but essential.
+        The abridged single-volume edition is the right starting point.
+
+    links:
+      - label: "Library of Congress: Gutenberg Bible"
+        url: "https://www.loc.gov/exhibits/bibles/the-gutenberg-bible.html"
+        type: archive
+      - label: "Britannica: Printing Press"
+        url: "https://www.britannica.com/technology/printing-press"
+        type: reference
+      - label: "Europeana: Early Printed Books"
+        url: "https://www.europeana.eu/en/search?query=incunabula"
+        type: archive
+
+    image:
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Metal_movable_type.jpg/1280px-Metal_movable_type.jpg"
+      source: "Wikimedia Commons (CC BY-SA 3.0)"
+      alt: "Close-up of metal movable type blocks arranged in a compositing stick"
+      ascii_ramp: " .,:;i1tfLCG08@"
+
+    ambience: "mechanical press rhythm, paper rustle, ink smell implied"
+
+
+  - id: steam_engine
+    index: "VI"
+    name: "The Steam Engine & Industrialization"
+    era: "1760s CE"
+    era_sort: 1765
+    category: "The Industrial Age"
+    artifact_label: "Watt's separate condenser patent model — Birmingham, 1769 (replica)"
+
+    ascii_object: |
+       ___________
+      |  _     _  |
+      | | |   | | |
+      | |_|   |_| |
+      |   \   /   |
+      |    \ /    |
+      |     X     |
+      |    / \    |
+      |___/   \___|
+         |     |
+       __|_____|__
+      |___________|
+
+    placard_short: >
+      For all of prior history, the limiting factor in production was
+      human and animal muscle. The steam engine broke that constraint
+      forever. Touch to learn more.
+
+    placard_long: >
+      The steam engine is the hinge of modern economic history. Before it,
+      every civilization — however sophisticated — was ultimately constrained
+      by the energy output of human and animal bodies. The Newcomen engine
+      (1712) and Watt's improved version (1769) substituted the latent energy
+      stored in coal for the energy stored in flesh. The consequences were
+      total: factory production replaced cottage industry; cities swelled as
+      agricultural labor became industrial labor; railroads collapsed the
+      effective distance between markets; and global trade scaled in ways
+      that made colonialism systemically profitable. The steam engine also
+      created, for the first time, a civilization dependent on fossil fuels —
+      a dependency whose consequences are still accumulating.
+
+    gallery_note: >
+      James Watt did not invent the steam engine — he made it efficient
+      enough to be economical. The separate condenser (1769) reduced fuel
+      consumption by 75%. In technology, the engineering of efficiency
+      is often more transformative than the original invention.
+
+    key_figures:
+      - "Thomas Newcomen (atmospheric engine, 1712)"
+      - "James Watt (separate condenser, 1769)"
+      - "Richard Trevithick (high-pressure engine, locomotive, 1804)"
+
+    predecessor_ids: [fire, wheel]
+    descendant_ids: [electricity]
+
+    tags: [energy, labor, urbanization, industrial, fossil_fuels]
+
+    reading:
+      title: "The Lunar Men: Five Friends Whose Curiosity Changed the World"
+      author: "Jenny Uglow"
+      year: 2002
+      note: >
+        Beautifully written group biography of Watt, Priestley, Darwin,
+        and the Birmingham circle. The best way to inhabit the Industrial
+        Revolution intellectually.
+
+    links:
+      - label: "Science Museum London: James Watt"
+        url: "https://www.sciencemuseum.org.uk/objects-and-stories/james-watt-and-steam-power"
+        type: museum
+      - label: "Smithsonian: Industrial Revolution"
+        url: "https://americanhistory.si.edu/collections/object-groups/engines-of-change"
+        type: museum
+      - label: "Britannica: Steam Engine"
+        url: "https://www.britannica.com/technology/steam-engine"
+        type: reference
+
+    image:
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/SteamEngine_Boulton%26Watt_1784.jpg/1280px-SteamEngine_Boulton%26Watt_1784.jpg"
+      source: "Wikimedia Commons (Public Domain)"
+      alt: "Engraving of Boulton and Watt steam engine, 1784, showing beam and condenser"
+      ascii_ramp: " .:-=+*#%@"
+
+    ambience: "rhythmic piston, hissing steam, iron clank, factory floor"
+
+
+  - id: electricity
+    index: "VII"
+    name: "Electricity & Telecommunications"
+    era: "1800s CE"
+    era_sort: 1850
+    category: "The Industrial Age"
+    artifact_label: "Edison carbon-filament bulb prototype — Menlo Park, 1879 (replica)"
+
+    ascii_object: |
+          ___
+         /   \
+        | o o |
+        |  =  |
+         \___/
+           |
+        ---|---
+           |
+        ========
+
+    placard_short: >
+      Electricity is so embedded in modern life that we experience its
+      absence as emergency rather than normalcy. Touch to learn more.
+
+    placard_long: >
+      Electricity is not one technology but a substrate for all technologies
+      that followed it. The telegraph (1837) made communication faster than
+      physical transport for the first time in history. The electric light
+      (1879) abolished the hard boundary between day and night, extending
+      productive and social time by hours. The electric motor transferred
+      the efficiency gains of the steam age into a form that could be
+      miniaturized, distributed, and placed inside any device. By the early
+      20th century, the electrical grid had become the invisible
+      infrastructure of modern civilization — so foundational that every
+      subsequent information technology (radio, telephone, television,
+      computing, the internet) is, at its root, a specialized application
+      of electrical engineering.
+
+    gallery_note: >
+      The "War of Currents" (1880s–90s) between Edison's DC and
+      Tesla/Westinghouse's AC was not merely a business dispute — it
+      was a decision about the physical architecture of civilization.
+      AC won because it could be transmitted over long distances.
+      The choice shaped every building, every appliance, every power
+      plant built in the century that followed.
+
+    key_figures:
+      - "Michael Faraday (electromagnetic induction, 1831)"
+      - "Samuel Morse (telegraph, 1837)"
+      - "Thomas Edison & Nikola Tesla (light, AC/DC grid, 1880s)"
+
+    predecessor_ids: [steam_engine]
+    descendant_ids: [internet, germ_theory]
+
+    tags: [infrastructure, communication, energy, industrial, network]
+
+    reading:
+      title: "The Age of Edison: Electric Light and the Invention of Modern America"
+      author: "Ernest Freeberg"
+      year: 2013
+      note: >
+        Focuses on the social and cultural impact of electric light —
+        how it remade urban life, labor, and entertainment. Accessible
+        and richly detailed.
+
+    links:
+      - label: "Smithsonian: Edison & the Electric Light"
+        url: "https://americanhistory.si.edu/lighting/history/electric.htm"
+        type: museum
+      - label: "IEEE History: Milestones in Electrical Engineering"
+        url: "https://ethw.org/Milestones:List_of_IEEE_Milestones"
+        type: institutional
+      - label: "PBS American Experience: Tesla"
+        url: "https://www.pbs.org/wgbh/americanexperience/films/tesla/"
+        type: educational
+
+    image:
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Edison_bulb.jpg/800px-Edison_bulb.jpg"
+      source: "Wikimedia Commons (Public Domain)"
+      alt: "Original Edison carbon filament light bulb, glowing against dark background"
+      ascii_ramp: " .'`^,:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+
+    ambience: "electrical hum, telegraph tapping, distant city at night"
+
+
+  - id: germ_theory
+    index: "VIII"
+    name: "Germ Theory & Modern Medicine"
+    era: "1850s CE"
+    era_sort: 1860
+    category: "The Scientific Age"
+    artifact_label: "Louis Pasteur's swan-neck flask — Institut Pasteur, Paris (replica)"
+
+    ascii_object: |
+        ___
+       /   \
+      | ~~~ |
+      |     |
+       \___/
+         |
+         |  <-- sealed neck
+        / \
+       /   \
+      |     |
+      |_____|
+
+    placard_short: >
+      For most of human history, the leading causes of death were
+      invisible and mysterious. Germ theory named them. Touch to learn more.
+
+    placard_long: >
+      Before germ theory, disease was explained by miasma (bad air),
+      divine punishment, or humoral imbalance. Pasteur's experiments
+      (1850s–1860s) and Koch's postulates (1884) established that
+      specific microorganisms cause specific diseases — a conceptual
+      revolution that made prevention and treatment logically possible
+      for the first time. Lister's antiseptic surgery followed.
+      Vaccines (building on Jenner's earlier smallpox work) were
+      systematized. Antibiotics arrived in the 20th century. The
+      combined effect was the most dramatic change in the baseline of
+      human experience since fire: global life expectancy roughly
+      doubled in under a century. The world's current population of
+      eight billion is impossible without it. The COVID-19 mRNA vaccines
+      (2020) represent the most recent acceleration of this centuries-long
+      trajectory.
+
+    gallery_note: >
+      Ignaz Semmelweis proved in 1847 that doctors washing their hands
+      between autopsies and deliveries reduced puerperal fever deaths
+      from 18% to 1%. He was ridiculed by the medical establishment,
+      institutionalized, and died of the same infection he had spent
+      his career fighting. Institutions resist paradigm shifts even
+      when the evidence is overwhelming.
+
+    key_figures:
+      - "Louis Pasteur (germ theory, pasteurization, vaccines, 1850s–80s)"
+      - "Robert Koch (disease-specific pathogens, 1876–84)"
+      - "Ignaz Semmelweis (hand-washing, 1847)"
+      - "Alexander Fleming (penicillin, 1928)"
+
+    predecessor_ids: [writing, electricity]
+    descendant_ids: []
+
+    tags: [biological, public_health, scientific, medicine, modern]
+
+    reading:
+      title: "The Doctor's Plague: Germs, Childbed Fever, and the Strange Story of Ignaz Semmelweis"
+      author: "Sherwin B. Nuland"
+      year: 2003
+      note: >
+        Short, gripping, and devastating. The best single entry point
+        into the human story behind the germ theory revolution.
+
+    links:
+      - label: "CDC: History of Vaccines"
+        url: "https://www.cdc.gov/vaccines/hcp/conversations/understanding-vacc-work.html"
+        type: institutional
+      - label: "Institut Pasteur: Louis Pasteur"
+        url: "https://www.pasteur.fr/en/institut-pasteur/history/louis-pasteur"
+        type: institutional
+      - label: "NIH: History of Germ Theory"
+        url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1888645/"
+        type: academic
+
+    image:
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Tableau_Louis_Pasteur.jpg/800px-Tableau_Louis_Pasteur.jpg"
+      source: "Wikimedia Commons (Public Domain)"
+      alt: "Portrait painting of Louis Pasteur in his laboratory, 1885"
+      ascii_ramp: " .,;:clodxkO0KXN#"
+
+    ambience: "laboratory quiet, glass clink, distant hospital sounds"
+
+
+  - id: internet
+    index: "IX"
+    name: "The Internet & Networked Computing"
+    era: "1969–1990s"
+    era_sort: 1991
+    category: "The Information Age"
+    artifact_label: "IMP Interface Message Processor panel — ARPANET node 1, UCLA, 1969"
+
+    ascii_object: |
+      [PC]---[PC]
+        \     /
+         \   /
+      [PC]-[HUB]-[PC]
+         /   \
+        /     \
+      [SRV]--[SRV]
+
+    placard_short: >
+      For the first time in history, any human with a connection could
+      publish to the entire species simultaneously. Touch to learn more.
+
+    placard_long: >
+      The internet did to the printing press what the printing press did
+      to oral culture: it didn't merely accelerate the distribution of
+      knowledge, it changed the fundamental nature of authorship,
+      audience, and truth. ARPANET (1969) was a military research
+      network designed to survive nuclear attack through distributed
+      routing. Tim Berners-Lee's World Wide Web (1991) transformed it
+      into a universal publishing medium. Within a decade, the barriers
+      to global communication had collapsed: any individual with a
+      connection could address the entire species. E-commerce restructured
+      retail; social media restructured political discourse; Wikipedia
+      restructured the encyclopedia; streaming restructured entertainment.
+      We are still living through the consequences of this redistribution
+      of the power to publish, and the institutions built on the old
+      scarcity of attention have not yet found their footing.
+
+    gallery_note: >
+      The founding protocol of the internet — TCP/IP — was designed
+      with openness as a core value: no central authority, no required
+      identification, no gatekeeping. This architectural choice made
+      the web's explosive growth possible. It also made spam, surveillance,
+      and disinformation structurally difficult to prevent.
+
+    key_figures:
+      - "Vint Cerf & Bob Kahn (TCP/IP protocol, 1974)"
+      - "Tim Berners-Lee (World Wide Web, 1991)"
+      - "DARPA/ARPA team (ARPANET, 1969)"
+
+    predecessor_ids: [electricity, printing_press, writing]
+    descendant_ids: [ai]
+
+    tags: [network, information, society, digital, modern]
+
+    reading:
+      title: "Where Wizards Stay Up Late: The Origins of the Internet"
+      author: "Katie Hafner & Matthew Lyon"
+      year: 1996
+      note: >
+        The ARPANET origin story, told with journalistic clarity.
+        One of the best technology history books written.
+
+    links:
+      - label: "Internet Society: History of the Internet"
+        url: "https://www.internetsociety.org/internet/history-internet/"
+        type: institutional
+      - label: "W3C: Tim Berners-Lee's Original WWW Proposal"
+        url: "https://www.w3.org/History/1989/proposal.html"
+        type: primary_source
+      - label: "Computer History Museum: ARPANET"
+        url: "https://www.computerhistory.org/internethistory/"
+        type: museum
+
+    image:
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Internet_map_1024.jpg/1024px-Internet_map_1024.jpg"
+      source: "Wikimedia Commons (CC BY 2.5)"
+      alt: "Visualization of internet routing paths, showing interconnected nodes across a dark background"
+      ascii_ramp: " .:-=+*#%@"
+
+    ambience: "modem handshake, keyboard typing, server hum"
+
+
+  - id: ai
+    index: "X"
+    name: "Artificial Intelligence (Large Language Models)"
+    era: "2020s CE"
+    era_sort: 2022
+    category: "The Information Age"
+    artifact_label: "GPU cluster node — transformer model training rack, 2023"
+    exhibit_status: "ONGOING — exhibit record subject to revision"
+
+    ascii_object: |
+      [INPUT]
+         |
+      =========
+      |LAYER 1|
+      =========
+         |
+      =========
+      |LAYER 2|
+      =========
+         |
+      =========
+      |LAYER N|
+      =========
+         |
+      [OUTPUT]
+
+    placard_short: >
+      Every prior technology extended human physical capability or the
+      reach of human-authored thought. This one may be different.
+      Touch to learn more.
+
+    placard_long: >
+      Every technology in this hall extended what human bodies could do,
+      or amplified the reach of human-authored ideas. Artificial
+      intelligence — specifically the large language models that emerged
+      in the early 2020s — appears to be the first technology that can
+      generate novel reasoning without a human author present in the loop.
+      Whether this constitutes a genuine paradigm shift or a very
+      sophisticated amplification tool remains genuinely contested.
+      The historical parallels are instructive but imperfect: the printing
+      press redistributed who could publish; the internet redistributed
+      who could be heard; AI may be redistributing who — or what — can
+      think. The governance questions, the labor displacement questions,
+      and the questions of what human cognition is even for in a world
+      with capable AI reasoning — all remain entirely open. This exhibit
+      is necessarily provisional.
+
+    gallery_note: >
+      This is the only exhibit in the Hall whose placard the museum
+      cannot yet finalize. We have placed it here not because we are
+      certain it belongs among these others, but because we believe
+      the question deserves to be asked in this company.
+
+    key_figures:
+      - "Alan Turing (theoretical foundations, 1950)"
+      - "Geoffrey Hinton, Yann LeCun, Yoshua Bengio (deep learning, 2010s)"
+      - "OpenAI / Anthropic / Google DeepMind teams (LLMs, 2020s)"
+
+    predecessor_ids: [internet, electricity, writing]
+    descendant_ids: []
+
+    tags: [cognitive, uncertain, present, reasoning, digital]
+
+    reading:
+      title: "The Alignment Problem: Machine Learning and Human Values"
+      author: "Brian Christian"
+      year: 2020
+      note: >
+        The most accessible and philosophically serious account of what
+        AI systems are actually doing and why alignment matters.
+        Pair with Melanie Mitchell's 'AI: A Guide for Thinking Humans'
+        for a more skeptical counterpoint.
+
+    links:
+      - label: "Stanford HAI: AI Index Report"
+        url: "https://aiindex.stanford.edu/report/"
+        type: academic
+      - label: "MIT Technology Review: AI Coverage"
+        url: "https://www.technologyreview.com/topic/artificial-intelligence/"
+        type: media
+      - label: "Anthropic: Core Views on AI Safety"
+        url: "https://www.anthropic.com/news/core-views-on-ai-safety"
+        type: institutional
+      - label: "Alan Turing Institute"
+        url: "https://www.turing.ac.uk/"
+        type: academic
+
+    image:
+      url: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Google_DeepMind_A100_Servers.jpg/1280px-Google_DeepMind_A100_Servers.jpg"
+      source: "Wikimedia Commons (CC BY 4.0)"
+      alt: "Rows of GPU servers in a data center used for AI model training"
+      ascii_ramp: " .,;:clodxkO0KXN#"
+
+    ambience: "server fan hum, cooling systems, data center white noise"
+
+
+# ============================================================
+# SUPPLEMENTAL RECORDS — Honorable Mentions Wing
+# (Shorter format — displayed in side gallery)
+# ============================================================
+
+honorable_mentions:
+
+  - id: compass
+    name: "The Compass & Navigation"
+    era: "c. 1100 CE (maritime use)"
+    placard_short: >
+      The compass didn't just help sailors find north — it made
+      sustained open-ocean navigation possible, connecting hemispheres
+      that had evolved in isolation for fifty thousand years.
+    key_figures: ["Zheng He", "Ferdinand Magellan", "Ibn Battuta"]
+    reading:
+      title: "A History of the World in Twelve Maps"
+      author: "Jerry Brotton"
+      year: 2012
+    tags: [navigation, exploration, trade, medieval]
+
+  - id: dna
+    name: "DNA & Molecular Biology"
+    era: "1953 CE"
+    placard_short: >
+      Watson, Crick, Franklin, and Wilkins revealed the physical
+      substrate of heredity. Every subsequent advance in medicine,
+      agriculture, and forensics flows from that double helix.
+    key_figures: ["Rosalind Franklin", "James Watson", "Francis Crick"]
+    reading:
+      title: "The Eighth Day of Creation"
+      author: "Horace Freeland Judson"
+      year: 1979
+    tags: [biological, genetics, medicine, modern, scientific]
+
+  - id: nuclear
+    name: "Nuclear Technology"
+    era: "1938–1945 CE"
+    placard_short: >
+      Fission unlocked the energy stored in atomic nuclei — powering
+      cities and threatening civilizational extinction simultaneously.
+      No technology has more dramatically altered geopolitical risk.
+    key_figures: ["Lise Meitner", "Enrico Fermi", "J. Robert Oppenheimer"]
+    reading:
+      title: "The Making of the Atomic Bomb"
+      author: "Richard Rhodes"
+      year: 1986
+    tags: [energy, weapons, geopolitics, modern, risk]
+
+  - id: green_revolution
+    name: "The Green Revolution"
+    era: "1960s–1970s CE"
+    placard_short: >
+      Norman Borlaug's high-yield wheat varieties, paired with synthetic
+      fertilizers and irrigation, fed billions who would otherwise have
+      starved — and concentrated agricultural power in ways still
+      being reckoned with.
+    key_figures: ["Norman Borlaug", "Fritz Haber (nitrogen fixation)", "M.S. Swaminathan"]
+    reading:
+      title: "The Man Who Fed the World"
+      author: "Leon Hesser"
+      year: 2006
+    tags: [food, agriculture, modern, biological, economic]
+
+
+# ============================================================
+# MUSEUM METADATA
+# ============================================================
+
+museum:
+  name: "Hall of Human Transformation"
+  subtitle: "Ten Technologies That Remade the World"
+  version: "1.0.0"
+  schema_version: "1.0"
+  ascii_ramp_default: " .:-=+*#%@"
+  ascii_ramp_fine: " .'`^,:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+  recommended_terminal_width: 80
+  recommended_terminal_height: 24
+  color_mode: "monochrome_preferred"
+  image_display: "ascii_rendered_on_inspect"
+  navigation_hint: "Use arrow keys to walk. SPACE or ENTER to interact. ESC to close placard."
