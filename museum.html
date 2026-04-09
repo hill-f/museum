@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hall of Human Transformation</title>
+<style>
+  /* ── Base ── */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #ffb000;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── Game screen ── */
+  #screen {
+    white-space: pre;
+    letter-spacing: 0;
+    border: 1px solid #333;
+    padding: 4px 8px;
+    position: relative;
+    user-select: none;
+  }
+
+  /* Color classes applied via spans inside the pre */
+  .wall    { color: #555; }
+  .floor   { color: #222; }
+  .door    { color: #00aaff; }
+  .object  { color: #00ff41; }
+  .player  { color: #ffb000; font-weight: bold; }
+  .hint    { color: #00ff41; }
+  .dim     { color: #1a1a1a; }
+  .exhibit-glow { color: #00ff41; text-shadow: 0 0 8px #00ff41; }
+
+  /* ── Status bar ── */
+  #statusbar {
+    font-size: 13px;
+    color: #555;
+    margin-top: 6px;
+    letter-spacing: 0.05em;
+  }
+  #statusbar span { color: #ffb000; }
+
+  /* ── Modal overlay ── */
+  #modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  #modal-backdrop.open { display: flex; }
+
+  /* Outer modal box */
+  #modal {
+    font-family: 'Courier New', Courier, monospace;
+    color: #ffb000;
+    background: #000;
+    border: 1px solid #ffb000;
+    width: min(820px, 96vw);
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Header strip above the two panels */
+  #modal .modal-header {
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid #2a2a2a;
+    flex-shrink: 0;
+  }
+  #modal .modal-index { color: #555; font-size: 11px; letter-spacing: 0.22em; }
+  #modal .modal-title { color: #ffb000; font-size: 18px; font-weight: bold; margin: 3px 0 2px; line-height: 1.2; }
+  #modal .modal-era   { color: #777; font-size: 12px; }
+
+  /* Two-panel body */
+  #modal .modal-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* LEFT — ASCII image panel */
+  #modal .modal-left {
+    width: 260px;
+    flex-shrink: 0;
+    border-right: 1px solid #1e1e1e;
+    padding: 12px 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  #modal .modal-img {
+    color: #00ff41;
+    font-size: 11px;
+    line-height: 1.05;
+    white-space: pre;
+    overflow: hidden;
+  }
+
+  /* RIGHT — text panel */
+  #modal .modal-right {
+    flex: 1;
+    padding: 14px 18px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  #modal .modal-rule  { color: #2a2a2a; font-size: 12px; }
+  #modal .modal-text  { color: #c8944a; font-size: 13px; line-height: 1.7; white-space: pre-wrap; }
+  #modal .modal-note  { color: #555; font-size: 12px; font-style: italic; line-height: 1.55; white-space: pre-wrap; border-left: 2px solid #2a2a2a; padding-left: 10px; }
+  #modal .modal-reading { color: #447; font-size: 11px; line-height: 1.5; }
+  #modal .modal-reading span { color: #668; }
+
+  /* Footer */
+  #modal .modal-footer {
+    padding: 8px 16px;
+    border-top: 1px solid #1a1a1a;
+    color: #444;
+    font-size: 11px;
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+  }
+  #modal .modal-footer span { color: #00ff41; }
+
+  /* ── Monochrome fallback ── */
+  @media (prefers-color-scheme: light) {
+    body { background: #fff; color: #000; }
+    #screen { border-color: #ccc; }
+    .wall { color: #999; } .floor { color: #ddd; }
+    .door { color: #00f; } .object { color: #060; }
+    .player { color: #000; } .hint { color: #060; }
+    #modal { background: #fff; border-color: #000; color: #000; }
+    #modal .modal-left { border-right-color: #ccc; }
+    #modal .modal-header { border-bottom-color: #ccc; }
+    #modal .modal-text { color: #333; }
+    #modal .modal-img { color: #060; }
+    #modal .modal-note { border-left-color: #ccc; color: #666; }
+  }
+</style>
+</head>
+<body>
+
+<pre id="screen"></pre>
+<div id="statusbar">HALL OF HUMAN TRANSFORMATION &nbsp;|&nbsp; arrows: move &nbsp;|&nbsp; enter: examine &nbsp;|&nbsp; esc: close</div>
+
+<div id="modal-backdrop">
+  <div id="modal"></div>
+</div>
+
+<canvas id="imgCanvas" hidden></canvas>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// 1. EXHIBIT DATA
+//    A trimmed version of exhibits.yaml — just fire for now.
+//    We'll load all 10 in Milestone 3.
+// ═══════════════════════════════════════════════════════════
+
+const EXHIBITS = {
+  fire: {
+    id: 'fire',
+    index: 'I',
+    name: 'Fire & Controlled Combustion',
+    era: 'c. 400,000 BCE',
+    placard_short: `Before fire, humans were prey. After fire, they were the most dangerous species on Earth.`,
+    placard_long: `Before fire, humans were prey. After fire, they were the most dangerous species on Earth. Controlled combustion compressed calories, shrank the gut, and expanded the brain. It extended the day, created the campfire — the first protected social space — and gave rise to storytelling, ritual, and myth.
+
+Every industrial technology downstream — metallurgy, ceramics, glass, steam, electricity, nuclear fission — is, at root, controlled heat applied to matter. Fire is not one technology among many. It is the trunk of nearly the entire tree of material civilization.
+
+The anthropologist Richard Wrangham argues that cooking is the primary driver of Homo sapiens' distinctive anatomy. Cooked food releases far more calories per bite and requires dramatically less gut to process. The metabolic savings migrated upward over hundreds of thousands of years: intestines shrank, skulls expanded.
+
+Fire also restructured power. Whoever controlled fire controlled warmth, food, and protection. It became the first communal resource — and the first thing worth cooperating to maintain.`,
+    gallery_note: `"In nearly every human mythology, fire is stolen — from gods, from nature, hidden in fennel stalks. This is a cultural memory of rupture: the moment we crossed a threshold we could never uncross."`,
+    ascii_object: `    )  (\n   (   ) )\n    ) ( (\n  _______)_\n.-'---------|\n( C|/\\/\\/\\/\\|\n '-./\\/\\/\\/\\|\n   '_________'\n    '-------'`,
+    reading: {
+      title: 'Catching Fire: How Cooking Made Us Human',
+      author: 'Richard Wrangham',
+      year: 2009
+    },
+    image_url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Campfire_at_Foster_Falls.jpg/640px-Campfire_at_Foster_Falls.jpg',
+    ascii_ramp: " .'`^,:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+// 2. ROOM DATA
+//    The map is an array of strings — one string per row.
+//    Each character is one tile.
+//    Tile key: # wall, . floor, + door, space=floor
+//
+//    OBJECTS array maps exhibit ids to tile positions.
+//    The '?' glyph in the map marks where an object sits.
+// ═══════════════════════════════════════════════════════════
+
+const ROOMS = {
+  hall_1: {
+    // 78 chars wide × 22 rows tall
+    map: [
+      '##############################################################################',
+      '#  HALL OF HUMAN TRANSFORMATION                                              #',
+      '#                                                                            #',
+      '#   .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  #',
+      '#                                                                            #',
+      '#                                                                            #',
+      '#        ___                                                                 #',
+      '#       /   \\         EXHIBIT I                                             #',
+      '#      | ~~~ |                                                               #',
+      '#      |     |        Fire &                                                 #',
+      '#       \\___/         Controlled                                            #',
+      '#         |           Combustion                                             #',
+      '#         ?                                                                  #',
+      '#                                                                            #',
+      '#   .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  #',
+      '#                                                                            #',
+      '#                                                                            #',
+      '#                          [ more exhibits coming ]                          #',
+      '#                                                                            #',
+      '#                                                                            #',
+      '#                                +                                           #',
+      '##############################################################################',
+    ],
+    // Where each interactable object lives and which exhibit it maps to
+    objects: [
+      { x: 9, y: 12, exhibitId: 'fire' }
+    ],
+    // Where the player starts in this room
+    playerStart: { x: 38, y: 15 },
+    // Doors: tile position + destination room + arrival position
+    doors: [
+      { x: 42, y: 21, toRoom: 'hall_1', toX: 38, toY: 18 } // placeholder loop
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+// 3. GAME STATE
+//    One object holds everything. Mutations trigger a re-render.
+// ═══════════════════════════════════════════════════════════
+
+const STATE = {
+  currentRoom: 'hall_1',
+  player: { x: 38, y: 15 },
+  modal: {
+    open: false,
+    exhibitId: null
+  },
+  nearObject: null,   // exhibitId of adjacent object, or null
+  tick: 0             // increments on every render, drives subtle effects
+};
+
+// ═══════════════════════════════════════════════════════════
+// 4. RENDERER
+//    Builds the full screen as a string with HTML spans,
+//    then writes it to the <pre> element.
+// ═══════════════════════════════════════════════════════════
+
+const screen = document.getElementById('screen');
+
+function getRoom() { return ROOMS[STATE.currentRoom]; }
+
+function getTile(room, x, y) {
+  const row = room.map[y];
+  if (!row) return '#';
+  return row[x] || '#';
+}
+
+// Check if player is adjacent to (or on) a given tile position
+function isAdjacent(px, py, tx, ty) {
+  return Math.abs(px - tx) <= 1 && Math.abs(py - ty) <= 1;
+}
+
+function render() {
+  STATE.tick++;
+  const room = getRoom();
+  const { x: px, y: py } = STATE.player;
+
+  // Build a 2D array of {char, cls} for each tile
+  const rows = room.map.map((row, y) =>
+    row.split('').map((char, x) => {
+      // Player position
+      if (x === px && y === py) return { char: '☺', cls: 'player' };
+
+      // Object tiles
+      const obj = room.objects.find(o => o.x === x && o.y === y);
+      if (obj) {
+        const near = isAdjacent(px, py, x, y);
+        // Pulse the glyph when player is adjacent
+        const pulse = near && (STATE.tick % 8 < 4);
+        return { char: pulse ? '*' : '?', cls: near ? 'exhibit-glow' : 'object' };
+      }
+
+      // Normal tiles
+      switch (char) {
+        case '#': return { char, cls: 'wall' };
+        case '+': return { char, cls: 'door' };
+        case '.': return { char, cls: 'floor' };
+        case ' ': return { char, cls: 'floor' };
+        default:  return { char, cls: 'hint' };
+      }
+    })
+  );
+
+  // Convert to HTML string — each row joined, wrapped in spans by run
+  // (We do run-length encoding to minimize span count)
+  const html = rows.map(row => {
+    let out = '';
+    let runCls = null, runChars = '';
+    for (const { char, cls } of row) {
+      if (cls === runCls) {
+        runChars += char;
+      } else {
+        if (runCls) out += `<span class="${runCls}">${runChars}</span>`;
+        runCls = cls; runChars = char;
+      }
+    }
+    if (runCls) out += `<span class="${runCls}">${runChars}</span>`;
+    return out;
+  }).join('\n');
+
+  screen.innerHTML = html;
+
+  // Update nearObject state
+  const nearby = room.objects.find(o => isAdjacent(px, py, o.x, o.y));
+  STATE.nearObject = nearby ? nearby.exhibitId : null;
+
+  // Update status bar hint
+  const bar = document.getElementById('statusbar');
+  if (STATE.nearObject) {
+    const ex = EXHIBITS[STATE.nearObject];
+    bar.innerHTML = `<span>ENTER</span> to examine: ${ex.name} &nbsp;|&nbsp; <span>ESC</span> to close`;
+  } else {
+    bar.innerHTML = `HALL OF HUMAN TRANSFORMATION &nbsp;|&nbsp; arrows: move &nbsp;|&nbsp; <span>enter</span>: examine &nbsp;|&nbsp; <span>esc</span>: close`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// 5. INPUT HANDLER
+//    Arrow keys move the player. ENTER opens modal.
+//    ESC closes modal. Simple and direct.
+// ═══════════════════════════════════════════════════════════
+
+document.addEventListener('keydown', e => {
+  if (STATE.modal.open) {
+    handleModalInput(e);
+    return;
+  }
+
+  const room = getRoom();
+  let { x, y } = STATE.player;
+
+  const moves = {
+    ArrowUp:    { dx:  0, dy: -1 },
+    ArrowDown:  { dx:  0, dy:  1 },
+    ArrowLeft:  { dx: -1, dy:  0 },
+    ArrowRight: { dx:  1, dy:  0 },
+  };
+
+  if (moves[e.key]) {
+    e.preventDefault();
+    const { dx, dy } = moves[e.key];
+    const nx = x + dx, ny = y + dy;
+    const tile = getTile(room, nx, ny);
+
+    // Collision — only block on walls
+    if (tile !== '#') {
+      STATE.player.x = nx;
+      STATE.player.y = ny;
+    }
+
+    // Check for door
+    const door = room.doors.find(d => d.x === nx && d.y === ny);
+    if (door) {
+      STATE.currentRoom = door.toRoom;
+      STATE.player = { x: door.toX, y: door.toY };
+    }
+
+    render();
+  }
+
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    if (STATE.nearObject) {
+      openModal(STATE.nearObject);
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// 6. MODAL CONTROLLER
+//    Opens, paginates, and closes the placard overlay.
+// ═══════════════════════════════════════════════════════════
+
+const backdrop = document.getElementById('modal-backdrop');
+const modalEl  = document.getElementById('modal');
+
+function openModal(exhibitId) {
+  STATE.modal = { open: true, exhibitId };
+  backdrop.classList.add('open');
+  renderModal();
+  renderAsciiImage(exhibitId);
+}
+
+function closeModal() {
+  STATE.modal.open = false;
+  backdrop.classList.remove('open');
+  // Resume render pulse
+  render();
+}
+
+function handleModalInput(e) {
+  if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    closeModal();
+  }
+}
+
+function renderModal() {
+  const ex = EXHIBITS[STATE.modal.exhibitId];
+  const divider = '─'.repeat(36);
+
+  modalEl.innerHTML =
+    // ── Header ──
+    `<div class="modal-header">` +
+      `<div class="modal-index">EXHIBIT ${ex.index}</div>` +
+      `<div class="modal-title">${ex.name}</div>` +
+      `<div class="modal-era">${ex.era}</div>` +
+    `</div>` +
+
+    // ── Two-panel body ──
+    `<div class="modal-body">` +
+
+      // Left: ASCII image
+      `<div class="modal-left">` +
+        `<pre class="modal-img" id="ascii-img-target">[rendering...]</pre>` +
+      `</div>` +
+
+      // Right: full text
+      `<div class="modal-right">` +
+        `<div class="modal-text">${ex.placard_long || ex.placard_short}</div>` +
+        `<div class="modal-rule">${divider}</div>` +
+        `<div class="modal-note">Curator's note:\n${ex.gallery_note}</div>` +
+        (ex.reading ? `<div class="modal-reading">Suggested reading: <span>${ex.reading.title}</span> — ${ex.reading.author} (${ex.reading.year})</div>` : '') +
+      `</div>` +
+
+    `</div>` +
+
+    // ── Footer ──
+    `<div class="modal-footer"><span>ESC</span> or <span>ENTER</span> to close</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// 7. ASCII IMAGE RENDERER
+//    Fetches an image, draws it to a hidden canvas,
+//    samples brightness, maps to characters.
+//    Falls back to the exhibit's ascii_object if fetch fails.
+// ═══════════════════════════════════════════════════════════
+
+const canvas = document.getElementById('imgCanvas');
+const ctx = canvas.getContext('2d');
+
+const DEFAULT_RAMP = ' .:-=+*#%@';
+const IMG_W = 50;   // characters wide
+const IMG_H = 22;   // characters tall (chars are ~2:1 h/w so we halve)
+
+async function renderAsciiImage(exhibitId) {
+  const ex = EXHIBITS[exhibitId];
+  const target = document.getElementById('ascii-img-target');
+  if (!target) return;
+
+  const ramp = ex.ascii_ramp || DEFAULT_RAMP;
+
+  try {
+    // Load image via a new Image element
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = ex.image_url;
+    });
+
+    // Draw to canvas at our target ASCII resolution
+    canvas.width  = IMG_W;
+    canvas.height = IMG_H;
+    ctx.drawImage(img, 0, 0, IMG_W, IMG_H);
+
+    const { data } = ctx.getImageData(0, 0, IMG_W, IMG_H);
+
+    // Map each pixel to a character based on brightness
+    let ascii = '';
+    for (let y = 0; y < IMG_H; y++) {
+      for (let x = 0; x < IMG_W; x++) {
+        const i = (y * IMG_W + x) * 4;
+        const r = data[i], g = data[i+1], b = data[i+2];
+        // Perceived brightness (standard luminance formula)
+        const brightness = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        const charIdx = Math.floor(brightness * (ramp.length - 1));
+        ascii += ramp[charIdx];
+      }
+      ascii += '\n';
+    }
+
+    if (target) target.textContent = ascii;
+
+  } catch (err) {
+    // CORS or network failure — fall back to the hand-drawn ascii_object
+    if (target) target.textContent = ex.ascii_object || '[image unavailable]';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// 8. PULSE LOOP
+//    The only continuous animation — makes the ? glyph pulse
+//    when the player is adjacent. Runs at ~4fps to feel retro.
+// ═══════════════════════════════════════════════════════════
+
+setInterval(() => {
+  if (!STATE.modal.open) render();
+}, 250);
+
+// ═══════════════════════════════════════════════════════════
+// 9. INIT — first render
+// ═══════════════════════════════════════════════════════════
+
+render();
+
+</script>
+</body>
+</html>
